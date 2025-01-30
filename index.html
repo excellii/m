@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مندي المسيباوي</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Kufi Arabic', Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: #8b0000;
+            --secondary-color: #ffd700;
+            --text-color: #333;
+            --background-color: #f8f9fa;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #5a0000);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/api/placeholder/1200/300') center/cover;
+            opacity: 0.1;
+        }
+
+        .logo {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 3px solid var(--secondary-color);
+        }
+
+        .logo-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            color: var(--primary-color);
+        }
+
+        .restaurant-name {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .menu-container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-color);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .menu-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .add-to-cart:hover {
+            background: #5a0000;
+            transform: scale(1.02);
+        }
+
+        .cart {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 350px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .cart h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .cart-items {
+            margin: 1rem 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-remove {
+            color: #dc3545;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .cart-item-remove:hover {
+            background-color: #fde8e8;
+        }
+
+        .total-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .checkout-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .checkout-form h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-button {
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .social-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .facebook {
+            background: #1877f2;
+        }
+
+        .whatsapp {
+            background: #25d366;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .cart {
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+            }
+
+            .menu-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-content">
+                <i class="fas fa-utensils"></i>
+                <div class="restaurant-name">مندي المسيباوي</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="menu-container" id="menu-container"></div>
+
+
+    <div class="overlay" id="overlay" onclick="hideCheckoutForm()"></div>
+
+    <div class="cart">
+        <h3>سلة الطلبات</h3>
+        <div class="cart-items" id="cart-items"></div>
+        <div>المجموع: <span id="total-price">0</span> د.ع</div>
+        <button class="add-to-cart" onclick="showCheckoutForm()">إتمام الطلب</button>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="checkout-form" id="checkout-form">
+        <h3>معلومات التوصيل</h3>
+        <input type="text" id="name" placeholder="الاسم الكامل" required>
+        <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+        <input type="text" id="address" placeholder="العنوان" required>
+        <div class="social-buttons">
+            <button class="social-button facebook" onclick="sendOrder('facebook')">
+                <i class="fab fa-facebook-messenger"></i> إرسال عبر فيسبوك
+            </button>
+            <button class="social-button whatsapp" onclick="sendOrder('whatsapp')">
+                <i class="fab fa-whatsapp"></i> إرسال عبر واتساب
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        const menuItems = [
+            { id: 1, name: 'مندي لحم', price: 15000, description: 'أرز بسمتي مع لحم ضأن طري', image: 'g.jpg' },
+            { id: 2, name: 'مندي دجاج', price: 12000, description: 'أرز بسمتي مع دجاج مشوي', image: 'g.jpg' },
+            { id: 3, name: 'كباب لحم', price: 10000, description: 'لحم مفروم متبل مع بهارات خاصة', image: 'g.jpg' },
+            { id: 4, name: 'كباب دجاج', price: 8000, description: 'دجاج مفروم متبل مع بهارات خاصة', image: 'g.jpg' },
+            { id: 5, name: 'همبركر لحم', price: 7000, description: 'برجر لحم مع خضروات طازجة', image: 'g.jpg' },
+            { id: 6, name: 'همبركر دجاج', price: 6000, description: 'برجر دجاج مع خضروات طازجة', image: 'g.jpg' },
+            { id: 7, name: 'شاورما لحم', price: 8000, description: 'شاورما لحم مع صوص خاص', image: 'g.jpg' },
+            { id: 8, name: 'شاورما دجاج', price: 6000, description: 'شاورما دجاج مع صوص خاص', image: 'g.jpg' },
+            { id: 9, name: 'برياني لحم', price: 14000, description: 'أرز برياني مع لحم ضأن وبهارات هندية', image: 'g.jpg' },
+            { id: 10, name: 'برياني دجاج', price: 11000, description: 'أرز برياني مع دجاج وبهارات هندية', image: 'g.jpg' },
+        ];
+
+        const cart = [];
+
+function renderMenu() {
+  const container = document.getElementById('menu-container');
+  menuItems.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'menu-item';
+    div.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <h3>${item.name}</h3>
+                    <div class="price">${item.price} د.ع</div>
+                    <button class="add-to-cart" onclick="addToCart('${item.name}', ${item.price})">إضافة للسلة</button>
+                `;
+    container.appendChild(div);
+  });
+}
+
+function addToCart(name, price) {
+  cart.push({ name, price });
+  updateCart();
+}
+
+function updateCart() {
+  const cartItems = document.getElementById('cart-items');
+  const totalPrice = document.getElementById('total-price');
+
+  cartItems.innerHTML = cart.map(item => `
+                <div>${item.name} - ${item.price} د.ع</div>
+            `).join('');
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  totalPrice.textContent = total;
+}
+
+function showCheckoutForm() {
+  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('checkout-form').style.display = 'block';
+}
+
+function sendOrder(platform) {
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const address = document.getElementById('address').value;
+
+  if (!name || !phone || !address) {
+    alert('الرجاء ملء جميع الحقول المطلوبة');
+    return;
+  }
+
+
+  const orderDetails = `
+سلام عليكم مطعم مندي المسيباوي
+طلبي هوَ
+الاسم: ${name}
+رقم الهاتف: ${phone}
+العنوان: ${address}
+
+الطلباتي:
+${cart.map(item => `${item.name} - ${item.price} د.ع`).join('\n')}
+
+المجموع: ${cart.reduce((sum, item) => sum + item.price, 0)} د.ع
+            `;
+
+  if (platform === 'whatsapp') {
+    window.open(`https://wa.me/9647760052536?text=${encodeURIComponent(orderDetails)}`);
+  } else {
+    window.open(`https://m.me/xradlz?text=${encodeURIComponent(orderDetails)}`);
+  }
+
+  // Reset form and cart
+  cart.length = 0;
+  updateCart();
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('checkout-form').style.display = 'none';
+  document.getElementById('checkout-form').reset();
+}
+
+// Initialize the menu
+renderMenu();
+</script> <
+/body> <
+/html>
